@@ -1,16 +1,22 @@
 # ============================================================
 # Production Dockerfile for n8n on Render
 # Uses official n8n image - no credentials baked in
+# n8n latest is Debian-based (not Alpine), so we use apt-get
 # ============================================================
 FROM n8nio/n8n:latest
 
-# Switch to root to set up the environment, then drop back to node user
+# Switch to root to install packages, then drop back to node user
 USER root
 
-# Install CA certs so SSL connections to Neon PostgreSQL work cleanly
-RUN apk add --no-cache ca-certificates tzdata
+# Install CA certificates and timezone data
+# n8n latest image is Debian-based - use apt-get, NOT apk
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends ca-certificates tzdata && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Create the n8n data directory and set correct ownership
+# Ensure the n8n data directory exists with correct ownership
 RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
 
 # Drop back to the unprivileged node user
