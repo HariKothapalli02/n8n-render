@@ -1,0 +1,30 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Node dependencies
+node_modules/
+
+# n8n local data
+.n8n/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker override files
+docker-compose.override.yml

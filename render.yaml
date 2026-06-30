@@ -1,0 +1,71 @@
+# ============================================================
+# render.yaml - Infrastructure-as-Code for Render.com
+# Defines the n8n web service using the Docker runtime.
+# All secret values must be set in the Render Dashboard.
+# ============================================================
+
+services:
+  - type: web
+    name: n8n
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    region: singapore
+    branch: main
+    autoDeploy: true
+
+    healthCheckPath: /healthz
+
+    envVars:
+      # Render system
+      - key: PORT
+        value: "5678"
+
+      # Database (Neon PostgreSQL)
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        sync: false
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        sync: false
+      - key: DB_POSTGRESDB_USER
+        sync: false
+      - key: DB_POSTGRESDB_PASSWORD
+        sync: false
+      - key: DB_POSTGRESDB_SSL_ENABLED
+        value: "true"
+      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+        value: "false"
+
+      # n8n Core
+      - key: N8N_PORT
+        value: "5678"
+      - key: N8N_HOST
+        sync: false
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        sync: false
+      - key: N8N_ENCRYPTION_KEY
+        sync: false
+      - key: GENERIC_TIMEZONE
+        value: Asia/Kolkata
+      - key: N8N_RUNNERS_ENABLED
+        value: "true"
+      - key: N8N_SECURE_COOKIE
+        value: "true"
+      - key: N8N_LOG_LEVEL
+        value: info
+      - key: N8N_LOG_OUTPUT
+        value: console
+
+      # Security
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        sync: false
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false
